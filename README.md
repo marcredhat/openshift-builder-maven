@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.com/ckaserer/openshift-S2I-builder-maven.svg?branch=master)](https://travis-ci.com/ckaserer/openshift-S2I-builder-maven)
 <p align="right">
 <img alt="gepardec" width=100px src="./.images/gepardec.png">
 </p>

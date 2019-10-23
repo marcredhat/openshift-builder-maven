@@ -1,0 +1,28 @@
+language: bash
+
+sudo: required
+dist: trusty
+
+services:
+- docker
+
+env:
+- JAVA_VERSION='java-11-openjdk'    REPO='s2i-builder-maven' TAG='latest'
+- JAVA_VERSION='java-11-openjdk'    REPO='s2i-builder-maven' TAG='11'
+- JAVA_VERSION='java-1.8.0-openjdk' REPO='s2i-builder-maven' TAG='8'
+
+script:
+- docker build -t ${ORGANIZATION}/${REPO}:${TAG} --build-arg JAVA_VERSION=${JAVA_VERSION} --no-cache .
+# security check
+- >
+  if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then 
+    .travis/security-scan.sh ${ORGANIZATION}/${REPO}:${TAG}
+  else
+    echo "security scan does not run for pull request. For further information see: https://docs.travis-ci.com/user/pull-requests/#pull-requests-and-security-restrictions"
+  fi
+# push image
+- >
+  if [ "$TRAVIS_BRANCH" == "master" ]; then
+    echo "${DOCKER_PASS}" | docker login -u "${DOCKER_USER}" --password-stdin
+    docker push ${ORGANIZATION}/${REPO}
+  fi
