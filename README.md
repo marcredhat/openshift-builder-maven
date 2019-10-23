@@ -129,26 +129,30 @@ oc describe route/hello-world | grep "Requested Host:"
 
 ## Implementation 2: Satisfy Main Objectives + Bonus Objectives
 
-In order to archive our bonus objectives we need to build and deploy our application faster. This can easily be done by mirroring the required build dependenciesthat the maven build would typically fetch from maven central in our infrastructure.
+In order to archive our bonus objectives we need to build and deploy our application faster. 
+Maven build typically fetches it dependencies from remote repositories such as maven central.
+Fetching those dependencies over the internet with every build is not performant enough.
+We can speed up the process by mirroring the required remote repositories in our infrastructure and use our local repositories instead.
 
-For this we will need a Nexus or another product with the capability to proxy the required remote repositories already set up.
+To archive this we will need a Nexus or another product with the capability to proxy the required remote repositories already set up.
 
-To bring our `binary-artefact` build up to speed we can set our own maven mirror(s) via a dedicated environment variable. In short we **replace step 3 from Implementation 1** with
+To speed up our `binary-artefact` build we can set our own maven mirror(s) via a dedicated environment variable. 
+In short we **replace step 3 from Implementation 1** with
 
 ```
-oc new-build builder~https://github.com/ckaserer/quickstart#18.0.0.Final \
+oc new-build s2i-builder-maven~https://github.com/ckaserer/quickstart#18.0.0.Final \
      --name=binary-artefact \
      --env=BUILDER_MVN_MIRROR="*|https:/my-maven-mirror/path/to/maven-public/" \
      --env=BUILDER_MVN_MIRROR_ALLOW_FALLBACK=true
 ```
 
-Note that you can speecify multiple maven mirrors via the `BUILDER_MVN_MIRROR` variable. More information on how to do that can be found in the section **Available Environment Variables in Costom Builder**.
+**Hint:** you can specify multiple maven mirrors via the `BUILDER_MVN_MIRROR` variable. More information on how to do that can be found in the section **Available Environment Variables in S2I Maven Builder**.
 
 **Hint:** we have introduced an additional environment variable `BUILDER_MVN_MIRROR_ALLOW_FALLBACK` which can be set to `true` or `false`. If set to `false` the build will fail if the specified mirror is unavailable. `true` on the other hand will fall back to the repositories specified in the pom.xml and build slowly instead. 
 
 ---
 
-# Available Environment Variables in Costom Builder
+# Available Environment Variables in S2I Maven Builder
 
 **BUILDER_MVN_OPTIONS** ... can be used to add additional option to the maven execution. <br>
 
