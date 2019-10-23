@@ -1,4 +1,7 @@
-[![Build Status](https://travis-ci.com/ckaserer/openshift-S2I-builder-maven.svg?branch=master)](https://travis-ci.com/ckaserer/openshift-S2I-builder-maven)
+[![Build Status](https://travis-ci.com/gepardec/openshift-S2I-builder-maven.svg?branch=master)](https://travis-ci.com/gepardec/openshift-S2I-builder-maven)
+![Maintenance](https://img.shields.io/maintenance/yes/2019)
+![Docker Pulls](https://img.shields.io/docker/pulls/gepardec/s2i-builder-maven)
+![GitHub](https://img.shields.io/github/license/gepardec/openshift-S2I-builder-maven)
 <p align="right">
 <img alt="gepardec" width=100px src="./.images/gepardec.png">
 </p>
