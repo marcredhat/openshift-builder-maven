@@ -7,9 +7,9 @@ services:
 - docker
 
 env:
-- ORGANIZATION=${DOCKER_USER} JAVA_VERSION='java-11-openjdk'    REPO='s2i-builder-maven' TAG='latest'
-- ORGANIZATION=${DOCKER_USER} JAVA_VERSION='java-11-openjdk'    REPO='s2i-builder-maven' TAG='11'
-- ORGANIZATION=${DOCKER_USER} JAVA_VERSION='java-1.8.0-openjdk' REPO='s2i-builder-maven' TAG='8'
+- JAVA_VERSION='java-11-openjdk'    REPO='s2i-builder-maven' TAG='latest'
+- JAVA_VERSION='java-11-openjdk'    REPO='s2i-builder-maven' TAG='11'
+- JAVA_VERSION='java-1.8.0-openjdk' REPO='s2i-builder-maven' TAG='8'
 
 script:
 - docker build -t ${ORGANIZATION}/${REPO}:${TAG} --build-arg JAVA_VERSION=${JAVA_VERSION} --no-cache .
