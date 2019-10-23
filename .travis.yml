@@ -1,0 +1,24 @@
+language: bash
+
+sudo: required
+dist: trusty
+
+services:
+- docker
+
+env:
+- ORGANIZATION=${DOCKER_USER} JAVA_VERSION='java-11-openjdk'    REPO='s2i-maven-builder' TAG='latest'
+- ORGANIZATION=${DOCKER_USER} JAVA_VERSION='java-11-openjdk'    REPO='s2i-maven-builder' TAG='11'
+- ORGANIZATION=${DOCKER_USER} JAVA_VERSION='java-1.8.0-openjdk' REPO='s2i-maven-builder' TAG='8'
+
+script:
+- docker build -t ${ORGANIZATION}/${REPO}:${TAG} --build-arg JAVA_VERSION=${JAVA_VERSION} .
+# push image
+- >
+  if [ "$TRAVIS_BRANCH" == "master" ]; then
+    echo "${DOCKER_PASS}" | docker login -u "${DOCKER_USER}" --password-stdin
+    docker push ${ORGANIZATION}/${REPO}
+  fi
+
+after_script:
+- "curl -X POST https://hooks.microbadger.com/images/${ORGANIZATION}/${REPO}/DZbx8L6AlXC3cgUBpDNsY6pe9sY="
